@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 80:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: emiliogq
+      WORDPRESS_DB_PASSWORD: emiliogq
+      WORDPRESS_DB_NAME: emiliogq_wp
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: emiliogq_wp
+      MYSQL_USER: emiliogq
+      MYSQL_PASSWORD: emiliogq
+      MYSQL_ROOT_HOST: "%"
+      MYSQL_LOG_CONSOLE: 1
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
