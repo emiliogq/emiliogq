@@ -1,0 +1,108 @@
+@startuml
+
+interface Visitor {
+ + {abstract} visitWebItem(WebItem w)
+ + {abstract} visitAppItem(AppItem a)
+ + {abstract} visitProject(Project p)
+}
+
+abstract class ProjectItem {
+ # int id
+ # String name
+ # String description
+ # Date startDate
+ # Date endDate
+ # String icon
+ --
+ + int getId()
+ + setId() 
+ + String getName()
+ + setName()
+ + String getDescription()
+ + setDescription()
+ + Date getStartDate()
+ + setStartDate()
+ + Date getEndDate()
+ + setEndDate()
+ + getIcon()
+ + setIcon()
+ + acceptVisitor(Visitor v)
+}
+
+ProjectItem -r- Visitor
+ProjectItem <|-d- Project
+
+class SoftwareDependency {
+ - int id
+ - String name
+ - String logo
+}
+
+SoftwareDependency "1" o-- "*" SoftwareDependency : dependencies
+SoftwareDependency  o-- SoftwareVersion : version
+
+class SoftwareVersion {
+ # int major
+ # int minor
+ # int patch
+ --
+ + int getMajor()
+ + setMajor()
+ + int getMinor()
+ + setMinor()
+ + int getPatch()
+ + setPatch()
+ + String getVersion()
+}
+
+SoftwareVersion "1" o-- "*" SoftwareDependency : dependencies
+
+
+abstract class SoftwareItem {
+ --
+ + addSoftwareDependency(SoftwareDependency sd)
+ + getSoftwareDependency(int i)
+ + removeSoftwareDependency(int i)
+}
+
+ProjectItem <|-d- SoftwareItem
+SoftwareItem  o--  SoftwareVersion : version
+
+class WebItem {
+ - String url
+ --
+ + WebItem(id, name, description, startDate, endDate, icon, url)
+}
+
+SoftwareItem <|-d- WebItem
+
+class AppItem {
+
+}
+
+SoftwareItem <|-d- AppItem
+
+
+class Project {
+  - List<ProjectItem> projectItems
+  --
+  + Project()
+  + Project(projectItems)
+  + addProjectItem(ProjectItem p)
+  + removeProjectItem(int i)
+  + removeProjectItem(ProjectItem p)
+  + ProjectItem getProjectItem(int i)
+}
+
+class Customer {
+ - int id
+ - String name
+}
+
+ProjectItem "*" --o "1" Project
+ProjectItem  o--  Project
+
+Project  o-l-  Customer
+Customer "1" o- "*" Project
+
+@enduml
